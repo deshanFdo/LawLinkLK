@@ -50,10 +50,6 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      container: {
-        center: true,
-        padding: "2rem",
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
