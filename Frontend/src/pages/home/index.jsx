@@ -5,7 +5,6 @@ import Features from "./components/Features"
 import FAQ from "./components/FAQ"
 import CTA from "./components/CTA"
 import Footer from "./components/Footer"
-import "./styles/home.css"
 
 export default function Home() {
   return (

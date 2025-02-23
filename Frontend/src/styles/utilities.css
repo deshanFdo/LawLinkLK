@@ -1,0 +1,23 @@
+/* src/styles/utilities.css */
+
+/* Importing Tailwind's utilities styles */
+@tailwind utilities;
+
+/* Custom utilities (optional) */
+@layer utilities {
+  .center {
+    @apply flex items-center justify-center;
+  }
+
+  .max-width {
+    @apply max-w-screen-xl;
+  }
+
+  .space-between {
+    @apply flex justify-between;
+  }
+
+  /* Additional utility classes can be added here */
+}
+
+/* You can also include any other utilities you use frequently */

@@ -1,0 +1,27 @@
+/* src/styles/base.css */
+
+/* Importing Tailwind's base styles */
+@tailwind base;
+
+/* Custom base styles (optional) */
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* You can add any global base styles here */
