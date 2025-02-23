@@ -1,4 +1,5 @@
 import { Target, Scale } from "lucide-react"
+import { ASSETS } from "../../../utils/constants"
 
 export default function About() {
   return (
@@ -8,7 +9,11 @@ export default function About() {
           {/* Image Section */}
           <div className="relative group">
             <div className="absolute -inset-4 bg-[#0066cc] opacity-10 rounded-xl group-hover:opacity-20 transition-opacity" />
-            <img src="/placeholder.svg" alt="About LawLinkLK" className="rounded-xl w-full shadow-lg relative" />
+            <img
+              src={ASSETS.HOME.IMAGES.ABOUT || "/placeholder.svg"}
+              alt="About LawLinkLK"
+              className="rounded-xl w-full shadow-lg relative object-cover"
+            />
           </div>
 
           {/* Content Section */}

@@ -1,4 +1,5 @@
 import { Facebook, Twitter, LinkedinIcon as LinkedIn, Instagram } from "lucide-react"
+import { ASSETS } from "../../../utils/constants"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -9,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 py-16">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold text-white mb-4">LawLinkLK</h3>
+            <img src={ASSETS.HOME.LOGOS.LIGHT || "/placeholder.svg"} alt="LawLinkLK Logo" className="h-8 mb-4" />
             <p className="mb-4">
               Connecting legal professionals and clients across Sri Lanka through innovative technology.
             </p>

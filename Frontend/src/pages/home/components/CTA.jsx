@@ -1,10 +1,16 @@
 import { ArrowRight } from "lucide-react"
+import { ASSETS } from "../../../utils/constants"
 
 export default function CTA() {
   return (
     <section className="relative py-20 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0066cc] to-blue-800" />
-      <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-10" />
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${ASSETS.HOME.BACKGROUNDS.CTA})` }}
+      />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0066cc]/90 to-blue-800/90" />
 
       <div className="container mx-auto container-padding relative z-10">
         <div className="max-w-3xl mx-auto text-center text-white">

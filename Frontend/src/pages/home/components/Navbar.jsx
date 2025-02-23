@@ -3,9 +3,20 @@
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Link as ScrollLink } from "react-scroll"
+import { ASSETS } from "../../../utils/constants"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  // Add scroll event listener
+  useState(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -17,12 +28,20 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="fixed top-0 w-full bg-white shadow-md z-50">
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled ? "bg-white shadow-md" : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <span className="text-2xl font-bold text-[#0066cc]">LawLinkLK</span>
+            <img
+              src={isScrolled ? ASSETS.HOME.LOGOS.DARK : ASSETS.HOME.LOGOS.LIGHT}
+              alt="LawLinkLK Logo"
+              className="h-8"
+            />
           </div>
 
           {/* Desktop Navigation */}
