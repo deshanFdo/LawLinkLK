@@ -58,8 +58,22 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
+    "tsx": "latest",
+    "jiti": "latest",
+    "less": "latest",
+    "sass": "latest",
+    "yaml": "latest",
+    "stylus": "latest",
+    "terser": "latest",
+    "sugarss": "latest",
+    "@types/node": "latest",
+    "lightningcss": "latest",
+    "sass-embedded": "latest",
+    "vite": "latest",
+    "react-scroll": "latest",
     "react-router-dom": "latest",
-    "react-scroll": "latest"
+    "@vitejs/plugin-react": "latest",
+    "path": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
