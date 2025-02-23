@@ -5,12 +5,12 @@ export default function About() {
   return (
     <section id="about" className="section-padding bg-white">
       <div className="container mx-auto container-padding">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-120 items-center">
           {/* Image Section */}
           <div className="relative group">
             <div className="absolute -inset-4 bg-[#0066cc] opacity-10 rounded-xl group-hover:opacity-20 transition-opacity" />
             <img
-              src={ASSETS.HOME.IMAGES.ABOUT || "/placeholder.svg"}
+              src={"../../../assets/home/images/about-image.jpg"}
               alt="About LawLinkLK"
               className="rounded-xl w-full shadow-lg relative object-cover"
             />
