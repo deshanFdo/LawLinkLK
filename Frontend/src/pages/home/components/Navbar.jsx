@@ -83,13 +83,13 @@ const Navbar = ({ isLoading }) => {
             </button>
             <div className="flex space-x-4">
               <Link
-                to="/auth/client-login"
+                to="/Frontend/src/pages/auth/ClientLogin.jsx"
                 className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent hover:text-white transition duration-300"
               >
                 Login
               </Link>
               <Link
-                to="/auth/register"
+                to="/Frontend/src/pages/auth/Register.jsx"
                 className="bg-primary text-white px-4 py-2 rounded-md hover:bg-accent hover:text-white transition duration-300"
               >
                 Register

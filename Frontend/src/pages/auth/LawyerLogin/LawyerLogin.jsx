@@ -1,9 +1,9 @@
-// frontend/src/pages/auth/ClientLogin/ClientLogin.jsx
+// frontend/src/pages/auth/LawyerLogin/LawyerLogin.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const ClientLogin = () => {
+const LawyerLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const ClientLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/client-login`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/lawyer-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +23,7 @@ const ClientLogin = () => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Client login successful!");
+        toast.success("Lawyer login successful!");
         navigate("/dashboard"); // Redirect to dashboard
       } else {
         toast.error(data.message || "Invalid credentials");
@@ -37,7 +37,7 @@ const ClientLogin = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Client Login</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Lawyer Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -85,4 +85,4 @@ const ClientLogin = () => {
   );
 };
 
-export default ClientLogin;
+export default LawyerLogin;

@@ -1,43 +1,44 @@
-// frontend/src/pages/auth/ClientLogin/ClientLogin.jsx
+// frontend/src/pages/auth/Registration/Registration.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const ClientLogin = () => {
+const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("client");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/client-login`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Client login successful!");
-        navigate("/dashboard"); // Redirect to dashboard
+        toast.success("Registration successful!");
+        navigate("/auth/client-login"); // Redirect to login page
       } else {
-        toast.error(data.message || "Invalid credentials");
+        toast.error(data.message || "Registration failed");
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.");
-      console.error("Error during login:", error);
+      console.error("Error during registration:", error);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Client Login</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Registration</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -65,18 +66,33 @@ const ClientLogin = () => {
               required
             />
           </div>
+          <div className="mb-6">
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              required
+            >
+              <option value="client">Client</option>
+              <option value="lawyer">Lawyer</option>
+            </select>
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
           >
-            Login
+            Register
           </button>
         </form>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <Link to="/auth/register" className="text-blue-600 hover:underline">
-              Register here
+            Already have an account?{" "}
+            <Link to="/auth/client-login" className="text-blue-600 hover:underline">
+              Login here
             </Link>
           </p>
         </div>
@@ -85,4 +101,4 @@ const ClientLogin = () => {
   );
 };
 
-export default ClientLogin;
+export default Registration;
