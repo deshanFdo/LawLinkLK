@@ -12,7 +12,7 @@ app.use(express.json());
 let users = [];
 
 // Import auth routes
-const authRouter = require("./pages/auth");
+const authRouter = require("./pages/auth/auth");
 
 // Use auth routes
 app.use("/api/auth", authRouter);

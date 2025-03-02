@@ -2,24 +2,11 @@
 const express = require("express");
 const router = express.Router();
 
-// In-memory lawyer data
-const lawyers = [
-  { email: "lawyer@example.com", password: "lawyerpassword" }
-];
-
-// Lawyer login endpoint
+// Example route for lawyer login
 router.post("/", (req, res) => {
   const { email, password } = req.body;
-
-  const lawyer = lawyers.find(
-    (l) => l.email === email && l.password === password
-  );
-
-  if (lawyer) {
-    res.json({ message: "Lawyer login successful!", lawyer });
-  } else {
-    res.status(401).json({ message: "Invalid lawyer credentials" });
-  }
+  // Add logic to handle lawyer login
+  res.status(200).json({ message: "Lawyer logged in successfully!" });
 });
 
 module.exports = router;
