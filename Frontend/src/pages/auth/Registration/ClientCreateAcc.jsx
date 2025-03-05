@@ -63,47 +63,38 @@ function ClientCreateAcc() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
     axios.defaults.withCredentials = true;
-  
+
     try {
-      let hasError = false;
-  
-      if (!calculatePasswordStrength(formData.password)) {
-        setErrors(prev => ({
-          ...prev,
-          password: "Password must be at least 8 characters long, including uppercase, lowercase, numbers, and symbols."
-        }));
-        hasError = true;
-      }
-  
-      if (formData.password !== formData.confirmPassword) {
-        setErrors(prev => ({
-          ...prev,
-          confirmPassword: "Passwords do not match. Please try again."
-        }));
-        hasError = true;
-      }
-  
-      if (hasError) return;
-  
-      const response = await axios.post(`${backendUrl}/api/auth/signup`, {
-        fullName: formData.fullName,
-        email: formData.email,
-        contact: formData.contact,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
+      const formDataToSend = new FormData();
+      formDataToSend.append("fullName", formData.fullName);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("contact", formData.contact);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("confirmPassword", formData.confirmPassword);
+      formDataToSend.append("document", formData.document);
+
+      const response = await axios.post(`${backendUrl}/api/client/signup`, formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       if (response.status === 201) {
         setEmail(formData.email);
-        toast.success("Account created successfully! Please check your email for the OTP.");
-        navigate("/verify-email");
+        toast.success("Account created successfully! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/login"); // Redirect to login page
+        }, 2000);
       } else {
         toast.error(response.data.msg || "An error occurred. Please try again.");
       }
     } catch (err) {
       console.error("Error during signup:", err);
       toast.error("An error occurred while creating your account. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -139,41 +130,43 @@ function ClientCreateAcc() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 p-4 overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-[42%_58%] w-full max-w-[1100px] h-[90vh] bg-white rounded-[28px] shadow-[0px_0px_1px_rgba(0,0,0,0.04),_0px_2px_6px_rgba(0,0,0,0.04),_0px_16px_24px_rgba(0,0,0,0.06)] overflow-hidden relative hover:shadow-[0px_0px_1px_rgba(0,0,0,0.08),_0px_8px_16px_rgba(0,0,0,0.08),_0px_24px_32px_rgba(0,0,0,0.12)] transition-shadow duration-300">
-        {/* Left Section - Animation Container (Hidden on Mobile) */}
-        <div className="hidden md:block bg-gradient-to-br from-[#0022fc] to-[#001cd8] p-8 flex flex-col items-center justify-between relative overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-[40%_60%] w-full max-w-[1000px] h-[85vh] bg-white rounded-[28px] shadow-lg overflow-hidden relative hover:shadow-xl transition-shadow duration-300">
+        {/* Left Section - Animation Container */}
+        <div className="hidden md:block bg-gradient-to-br from-[#0022fc] to-[#001cd8] p-6 flex flex-col items-center justify-between relative overflow-hidden">
           <div className="text-white text-center">
-            <h2 className="text-2xl font-bold text-white mb-2 relative">Welcome to LawLink LK</h2>
-            <p className="text-base text-white/90 mt-2 relative">Your One-Stop Solution for Legal Services</p>
+            <h2 className="text-2xl font-bold mb-2">Welcome to LawLink LK</h2>
+            <p className="text-base text-white/90 mt-2">Your One-Stop Solution for Legal Services</p>
           </div>
-    
-          <div className="w-full max-w-[380px] my-10 mx-auto relative z-10 group">
+
+          {/* Video Container */}
+          <div className="w-full max-w-[380px] my-4 mx-auto relative z-10 group">
             <video
               src={animation}
               autoPlay
               loop
               muted
-              className="w-full h-auto rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_25px_50px_rgba(0,0,0,0.25)] cursor-pointer"
+              className="w-full h-auto rounded-[16px] shadow-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl cursor-pointer"
             ></video>
             <div className="absolute inset-0 bg-[#0022fc]/10 opacity-0 group-hover:opacity-100 rounded-[16px] transition-opacity duration-300 pointer-events-none"></div>
           </div>
-    
+
+          {/* Logo Container */}
           <div className="logo-container flex justify-center w-full">
             <a href="https://www.lawlinklk.com/" target="_blank" rel="noopener noreferrer" className="transition-transform duration-300 hover:scale-110 inline-block">
               <img
-                className="w-[130px] h-auto mt-2 mb-8 filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity duration-300"
+                className="w-[98px] h-auto mt-2 mb-2 filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity duration-300"
                 src={logo}
                 alt="Logo"
               />
             </a>
           </div>
         </div>
-    
+
         {/* Right Section - Form Container */}
-        <div className="form-container p-4 md:p-8 md:px-14 bg-white overflow-y-auto">
+        <div className="form-container p-4 md:p-8 md:px-14 bg-white overflow-hidden">
           <h1 className="text-lg md:text-[1.875rem] font-bold text-[#0022fc] mt-px tracking-tighter">Create Account</h1>
           <div className="h-[3px] bg-[#0022fc] w-20 rounded-full my-4 transition-all duration-300 hover:w-32 hover:bg-[#0015d1]"></div>
-    
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             {/* Full Name Input */}
             <div className="input-group flex flex-col gap-2">
@@ -189,7 +182,7 @@ function ClientCreateAcc() {
               />
               {errors.fullName && <p className="text-sm text-red-500 mt-1">{errors.fullName}</p>}
             </div>
-    
+
             {/* Email and Contact Number Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               <div className="input-group flex flex-col gap-2">
@@ -205,7 +198,7 @@ function ClientCreateAcc() {
                 />
                 {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
               </div>
-    
+
               <div className="input-group flex flex-col gap-2">
                 <label className="text-sm font-semibold text-[#81a8e8]">Contact Number</label>
                 <input
@@ -220,7 +213,7 @@ function ClientCreateAcc() {
                 {errors.contact && <p className="text-sm text-red-500 mt-1">{errors.contact}</p>}
               </div>
             </div>
-    
+
             {/* Password and Confirm Password Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               <div className="input-group flex flex-col gap-2">
@@ -251,7 +244,7 @@ function ClientCreateAcc() {
                   </button>
                 </div>
               </div>
-    
+
               <div className="input-group flex flex-col gap-2">
                 <label className="text-sm font-semibold text-[#81a8e8]">Confirm Password</label>
                 <div className="relative">
@@ -279,7 +272,7 @@ function ClientCreateAcc() {
                 </div>
               </div>
             </div>
-    
+
             {/* Password Strength Indicator */}
             {(isPasswordFocused || formData.password) && (
               <div className="mt-3">
@@ -297,12 +290,12 @@ function ClientCreateAcc() {
                 </div>
               </div>
             )}
-    
+
             {/* Password Match Error */}
             {formData.password !== formData.confirmPassword && formData.confirmPassword && (
               <p className="text-xs text-red-500 mt-2 text-center">Passwords do not match.</p>
             )}
-    
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -312,7 +305,7 @@ function ClientCreateAcc() {
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </form>
-    
+
           {/* Login Link */}
           <div className="mt-6 text-sm text-[#02189c] text-center">
             <p>
@@ -326,7 +319,7 @@ function ClientCreateAcc() {
               </a>
             </p>
           </div>
-    
+
           {/* Disclaimer */}
           <p className="text-sm text-[#81a8e8] mt-6 text-center">
             By creating an account, you agree to our{" "}

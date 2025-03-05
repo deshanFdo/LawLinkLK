@@ -3,6 +3,8 @@ import { AppContext } from "../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import open from "../../../assets/Login_Cl_Lw/images/open.png";
+import close from "../../../assets/Login_Cl_Lw/images/close.png";
 
 function Newpassword() {
   const navigate = useNavigate();
@@ -126,9 +128,9 @@ function Newpassword() {
                 onClick={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? (
-                  <img src="images/close.png" alt="Hide password" className="w-5 h-5" />
+                  <img src={close} alt="Hide password" className="w-5 h-5" />
                 ) : (
-                  <img src="images/open.png" alt="Show password" className="w-5 h-5" />
+                  <img src={open} alt="Show password" className="w-5 h-5" />
                 )}
               </button>
             </div>
@@ -153,9 +155,9 @@ function Newpassword() {
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
               >
                 {showConfirmPassword ? (
-                  <img src="images/close.png" alt="Hide password" className="w-5 h-5" />
+                  <img src={close} alt="Hide password" className="w-5 h-5" />
                 ) : (
-                  <img src="images/open.png" alt="Show password" className="w-5 h-5" />
+                  <img src={open} alt="Show password" className="w-5 h-5" />
                 )}
               </button>
             </div>

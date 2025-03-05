@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import logo from "../../../assets/Login_Cl_Lw/images/logo.png";
+import close from "../../../assets/Login_Cl_Lw/images/close.png";
+import open from "../../../assets/Login_Cl_Lw/images/open.png";
+import animation from "../../../assets/Login_Cl_Lw/images/gtrfe.mp4";
 
 function LawyerCreateAcc() {
   const navigate = useNavigate();
@@ -60,11 +64,12 @@ function LawyerCreateAcc() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-  
+
     setIsSubmitting(true);
     axios.defaults.withCredentials = true;
-  
+
     try {
+      // Create FormData object to send file and other data
       const formDataToSend = new FormData();
       formDataToSend.append("fullName", formData.fullName);
       formDataToSend.append("email", formData.email);
@@ -72,15 +77,21 @@ function LawyerCreateAcc() {
       formDataToSend.append("password", formData.password);
       formDataToSend.append("confirmPassword", formData.confirmPassword);
       formDataToSend.append("documentForVerification", formData.document);
-  
+
+      // Send data to the backend
       const response = await axios.post(`${backendUrl}/api/lawyer/signup`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       if (response.status === 201) {
+        // Set email in context (if needed)
         setEmail(formData.email);
-        toast.success("Account created successfully! Please check your email for the OTP.");
-        navigate("/lawyer-verify-email");
+
+        // Show success message
+        toast.success("Account created successfully! Redirecting to dashboard...");
+
+        // Redirect to lawyer dashboard
+        navigate("/lawyer/lawyerdashboard");
       } else {
         toast.error(response.data.msg || "An error occurred. Please try again.");
       }
@@ -123,60 +134,65 @@ function LawyerCreateAcc() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[42%_58%] w-full max-w-[1100px] h-auto md:h-[660px] bg-white rounded-[28px] shadow-[0px_0px_1px_rgba(0,0,0,0.04),_0px_2px_6px_rgba(0,0,0,0.04),_0px_16px_24px_rgba(0,0,0,0.06)] overflow-hidden relative">
-      {/* Left Section - Animation Container (Hidden on Mobile) */}
-<div className="hidden md:block bg-gradient-to-br from-[#0022fc] to-[#001cd8] p-8 flex flex-col items-center justify-between relative overflow-hidden">
-  <div className="text-white text-center">
-    <h2 className="text-2xl font-bold text-white mb-2 relative">Welcome to LawLink LK</h2>
-    <p className="text-base text-white/90 mt-2 relative">Your One-Stop Solution for Legal Services</p>
-  </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-[42%_58%] w-full max-w-[1100px] h-auto md:h-[600px] bg-white rounded-[28px] shadow-lg overflow-hidden">
+        {/* Left Section - Animation Container (Hidden on Mobile) */}
+        <div className="hidden md:block bg-gradient-to-br from-[#0022fc] to-[#001cd8] p-6 flex flex-col items-center justify-between relative overflow-hidden">
+          <div className="text-white text-center">
+            <h2 className="text-2xl font-bold mb-2">Welcome to LawLink LK</h2>
+            <p className="text-base text-white/90 mt-2">Your One-Stop Solution for Legal Services</p>
+          </div>
 
-  <div className="w-full max-w-[380px] my-10 mx-auto relative z-10 group">
-    <video
-      src="images/gtrfe.mp4"
-      autoPlay
-      loop
-      muted
-      className="w-full h-auto rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_25px_50px_rgba(0,0,0,0.25)] cursor-pointer"
-    ></video>
-    <div className="absolute inset-0 bg-[#0022fc]/10 opacity-0 group-hover:opacity-100 rounded-[16px] transition-opacity duration-300 pointer-events-none"></div>
-  </div>
+          <div className="w-full max-w-[380px] my-4 mx-auto relative z-10 group">
+            <video
+              src={animation}
+              autoPlay
+              loop
+              muted
+              className="w-full h-auto rounded-[16px] shadow-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl cursor-pointer"
+            ></video>
+            <div className="absolute inset-0 bg-[#0022fc]/10 opacity-0 group-hover:opacity-100 rounded-[16px] transition-opacity duration-300 pointer-events-none"></div>
+          </div>
 
-  {/* Centered Logo */}
-  <div className="logo-container flex justify-center w-full">
-    <a href="https://www.lawlinklk.com/" target="_blank" rel="noopener noreferrer" className="transition-transform duration-300 hover:scale-110 inline-block">
-      <img
-        className="w-[130px] h-auto mt-2 mb-8 filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity duration-300"
-        src="images/logo.png"
-        alt="Logo"
-      />
-    </a>
-  </div>
-</div>
-  
-      {/* Right Section - Form Container */}
-      <div className="form-container p-4 md:p-8 md:px-14 bg-white">
-        <h1 className="text-[1.5rem] md:text-[1.875rem] font-bold text-[#0022fc] mt-px tracking-tighter">Create Account</h1>
-        <div className="line flex h-[3px] rounded-[10px] mb-[20px] md:mb-[30px]"></div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
-          <div className="input-group flex flex-col gap-1 w-full">
-            <label>Full Name</label>
-            <input
-              className="input w-full md:w-[510px] h-10 md:h-5 border-[1.5px] border-[#e5e7eb] rounded-[12px] px-5 text-[0.9375rem] bg-white transition-all duration-200 ease-in-out hover:border-[#d1d5db] focus:outline-none focus:border-[#0022fc] focus:ring-4 focus:ring-[rgba(0,34,252,0.08)]"
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              required
-            />
-            {errors.fullName && <p className="error">{errors.fullName}</p>}
-  
-            <div className="contacts grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-              <div>
-                <label>Email</label>
+          {/* Centered Logo */}
+          <div className="logo-container flex justify-center w-full">
+            <a href="https://www.lawlinklk.com/" target="_blank" rel="noopener noreferrer" className="transition-transform duration-300 hover:scale-110 inline-block">
+              <img
+                className="w-[100px] h-auto mt-2 mb-4 filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity duration-300"
+                src={logo}
+                alt="Logo"
+              />
+            </a>
+          </div>
+        </div>
+
+        {/* Right Section - Form Container */}
+        <div className="form-container p-4 md:p-8 md:px-14 bg-white overflow-y-auto">
+          <h1 className="text-lg md:text-[1.875rem] font-bold text-[#0022fc] mt-px tracking-tighter">Create Account</h1>
+          <div className="h-[3px] bg-[#0022fc] w-20 rounded-full my-4 transition-all duration-300 hover:w-32 hover:bg-[#0015d1]"></div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            {/* Full Name Input */}
+            <div className="input-group flex flex-col gap-2">
+              <label className="text-sm font-semibold text-[#81a8e8]">Full Name</label>
+              <input
+                className="w-full px-4 py-3 border-[2px] border-[#e5e7eb] rounded-[12px] text-sm focus:border-[#0022fc] focus:outline-none focus:ring-2 focus:ring-[#0022fc]/50 transition-all duration-200 hover:border-[#0022fc]/30"
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                required
+              />
+              {errors.fullName && <p className="text-sm text-red-500 mt-1">{errors.fullName}</p>}
+            </div>
+
+            {/* Email and Contact Number Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <div className="input-group flex flex-col gap-2">
+                <label className="text-sm font-semibold text-[#81a8e8]">Email</label>
                 <input
-                  className="contacts-input w-full"
+                  className="w-full px-4 py-3 border-[2px] border-[#e5e7eb] rounded-[12px] text-sm focus:border-[#0022fc] focus:outline-none focus:ring-2 focus:ring-[#0022fc]/50 transition-all duration-200 hover:border-[#0022fc]/30"
                   type="email"
                   name="email"
                   value={formData.email}
@@ -184,13 +200,13 @@ function LawyerCreateAcc() {
                   placeholder="Enter your email address"
                   required
                 />
-                {errors.email && <p className="error">{errors.email}</p>}
+                {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
               </div>
-  
-              <div>
-                <label>Contact Number</label>
+
+              <div className="input-group flex flex-col gap-2">
+                <label className="text-sm font-semibold text-[#81a8e8]">Contact Number</label>
                 <input
-                  className="contacts-input w-full"
+                  className="w-full px-4 py-3 border-[2px] border-[#e5e7eb] rounded-[12px] text-sm focus:border-[#0022fc] focus:outline-none focus:ring-2 focus:ring-[#0022fc]/50 transition-all duration-200 hover:border-[#0022fc]/30"
                   type="tel"
                   name="contact"
                   value={formData.contact}
@@ -198,38 +214,40 @@ function LawyerCreateAcc() {
                   placeholder="Enter your contact number"
                   required
                 />
-                {errors.contact && <p className="error">{errors.contact}</p>}
+                {errors.contact && <p className="text-sm text-red-500 mt-1">{errors.contact}</p>}
               </div>
             </div>
-  
-            <div className="file-input-wrapper w-full">
-              <label className="file-upload-label flex flex-col items-center gap-2 cursor-pointer">Document For Verification</label>
-              <div className="file-upload-container border-2 border-dashed border-[#e5e7eb] rounded-[12px] p-4 md:p-6 w-full text-center bg-[#f9fafb] transition-colors duration-300 ease-in-out hover:border-[#0022fc]">
+
+            {/* Document Upload */}
+            <div className="input-group flex flex-col gap-2">
+              <label className="text-sm font-semibold text-[#81a8e8]">Document For Verification</label>
+              <div className="border-2 border-dashed border-[#e5e7eb] rounded-[12px] p-4 text-center bg-[#f9fafb] transition-colors duration-300 hover:border-[#0022fc]">
                 <input
                   type="file"
                   name="document"
                   id="document"
                   accept=".pdf, .jpg, .jpeg, .png"
                   onChange={handleChange}
-                  className="file-input hidden"
+                  className="hidden"
                   required
                 />
-                <label htmlFor="document" className="file-upload-label">
-                  <span className="file-upload-text text-[0.875rem] text-[#0080ff]">
+                <label htmlFor="document" className="cursor-pointer">
+                  <span className="text-[0.875rem] text-[#0080ff]">
                     {formData.document ? formData.document.name : "Upload your document (PDF, JPG, PNG)"}
                   </span>
                 </label>
               </div>
-              <p style={{ color: "rgb(0, 21, 255)", fontSize: "10px", marginTop: "4px" }}>Please Upload Your Lawyer ID or Bar Association Certificate</p>
-              {errors.document && <p className="error">{errors.document}</p>}
+              <p className="text-[10px] text-[#0015ff] mt-1">Please Upload Your Lawyer ID or Bar Association Certificate</p>
+              {errors.document && <p className="text-sm text-red-500 mt-1">{errors.document}</p>}
             </div>
-  
-            <div className="passwords grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-              <div className="password-input-wrapper w-full">
-                <label>Password</label>
-                <div className="password-input-container relative flex items-center w-full">
+
+            {/* Password and Confirm Password Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <div className="input-group flex flex-col gap-2">
+                <label className="text-sm font-semibold text-[#81a8e8]">Password</label>
+                <div className="relative">
                   <input
-                    className="flex-grow pr-[70px] w-full"
+                    className="w-full px-4 py-3 border-[2px] border-[#e5e7eb] rounded-[12px] text-sm focus:border-[#0022fc] focus:outline-none focus:ring-2 focus:ring-[#0022fc]/50 transition-all duration-200 pr-12 hover:border-[#0022fc]/30"
                     type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
@@ -241,20 +259,24 @@ function LawyerCreateAcc() {
                   />
                   <button
                     type="button"
-                    className="password-toggle-btn absolute right-[10px] bg-transparent border-none text-[#888] cursor-pointer flex items-center justify-center hover:text-[#333]"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-none cursor-pointer transition-transform duration-200 hover:scale-110"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    {showPassword ? <img src="images/close.png" alt="Hide" className="w-5 h-5"/> : <img src="images/open.png" alt="Show" className="w-5 h-5" />}
+                    {showPassword ? (
+                      <img src={close} alt="Hide" className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity duration-200" />
+                    ) : (
+                      <img src={open} alt="Show" className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity duration-200" />
+                    )}
                   </button>
                 </div>
               </div>
-  
-              <div className="password-input-wrapper w-full">
-                <label>Confirm Password</label>
-                <div className="password-input-container relative flex items-center w-full">
+
+              <div className="input-group flex flex-col gap-2">
+                <label className="text-sm font-semibold text-[#81a8e8]">Confirm Password</label>
+                <div className="relative">
                   <input
-                    className="flex-grow pr-[70px] w-full"
+                    className="w-full px-4 py-3 border-[2px] border-[#e5e7eb] rounded-[12px] text-sm focus:border-[#0022fc] focus:outline-none focus:ring-2 focus:ring-[#0022fc]/50 transition-all duration-200 pr-12 hover:border-[#0022fc]/30"
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword}
@@ -264,55 +286,78 @@ function LawyerCreateAcc() {
                   />
                   <button
                     type="button"
-                    className="password-toggle-btn absolute right-[10px] bg-transparent border-none text-[#888] cursor-pointer flex items-center justify-center hover:text-[#333]"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-none cursor-pointer transition-transform duration-200 hover:scale-110"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
-                    {showConfirmPassword ? <img src="images/close.png" alt="Hide" className="w-5 h-5"/> : <img src="images/open.png" alt="Show" className="w-5 h-5" />}
+                    {showConfirmPassword ? (
+                      <img src={close} alt="Hide" className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity duration-200" />
+                    ) : (
+                      <img src={open} alt="Show" className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity duration-200" />
+                    )}
                   </button>
                 </div>
               </div>
             </div>
-  
+
+            {/* Password Strength Indicator */}
             {(isPasswordFocused || formData.password) && (
-              <>
-                <div className="password-strength-text text-[0.75rem] mt-1 text-[#005eff] font-medium text-center">
+              <div className="mt-3">
+                <div className="text-xs text-[#005eff] font-medium text-center">
                   Password Strength: {["Weak", "Fair", "Good", "Strong", "Very Strong"][passwordStrength - 1]}
                 </div>
-                <div className="password-strength-container w-full md:w-[400px] h-[10px] bg-[#e0e0e0] rounded-[3px] mt-2 overflow-hidden self-center">
+                <div className="w-full h-[10px] bg-[#e0e0e0] rounded-[3px] mt-1 overflow-hidden">
                   <div
-                    className="password-strength-bar h-full w-[50px] transition-all duration-300 ease-in-out"
-                    style={{ width: `${(passwordStrength / 5) * 100}%`, backgroundColor: getPasswordStrengthColor() }}
+                    className="h-full transition-all duration-300 ease-in-out"
+                    style={{ 
+                      width: `${(passwordStrength / 5) * 100}%`, 
+                      backgroundColor: getPasswordStrengthColor() 
+                    }}
                   ></div>
                 </div>
-              </>
+              </div>
             )}
-  
+
+            {/* Password Match Error */}
             {formData.password !== formData.confirmPassword && formData.confirmPassword && (
-              <p className="error text-[0.75rem] text-[#0015ff] mt-0.5 mb-0 text-center">Passwords do not match.</p>
+              <p className="text-xs text-red-500 mt-2 text-center">Passwords do not match.</p>
             )}
-          </div>
-    {/* Submit Button */}
-    <button
-            type="submit"
-            className="w-full py-3 px-6 bg-[#0022fc] text-white font-semibold rounded-[12px] hover:bg-[#001cd8] hover:-translate-y-[1px] hover:shadow-lg active:scale-95 transition-all duration-300 mt-4"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
-        </form>
-  
-        {/* Login Link */}
-        <div className="mt-6 text-sm text-[#02189c] text-center">
-          <p>
-            Already have an account?{" "}
-            <a
-              href="#"
-              onClick={() => navigate("/lawyer-login")}
-              className="text-[#007bff] font-semibold hover:underline"
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 px-6 bg-[#0022fc] text-white font-semibold rounded-[12px] hover:bg-[#001cd8] hover:-translate-y-[1px] hover:shadow-lg active:scale-95 transition-all duration-300 mt-4"
+              disabled={isSubmitting}
             >
-              Login
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
+          </form>
+
+          {/* Login Link */}
+          <div className="mt-6 text-sm text-[#02189c] text-center">
+            <p>
+              Already have an account?{" "}
+              <a
+                href="#"
+                onClick={() => navigate("/lawyer-login")}
+                className="text-[#007bff] font-semibold hover:underline hover:text-[#0022fc] transition-colors duration-200"
+              >
+                Login
+              </a>
+            </p>
+          </div>
+
+          {/* Disclaimer */}
+          <p className="text-sm text-[#81a8e8] mt-6 text-center">
+            By creating an account, you agree to our{" "}
+            <a href="#" className="text-[#0022fc] font-semibold hover:underline hover:text-[#001cd8] transition-colors duration-200">
+              Terms of Use
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-[#0022fc] font-semibold hover:underline hover:text-[#001cd8] transition-colors duration-200">
+              Privacy Policy
             </a>
+            .
           </p>
         </div>
       </div>

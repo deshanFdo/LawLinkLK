@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/home/Home";
@@ -18,6 +18,7 @@ import LawyerVerifyEmail from "./pages/auth/LawyerLogin/Lawyer-verify-email";
 import Lawyerlogin from "./pages/auth/LawyerLogin/LawyerLogin";
 import LawyerEmailForResetPass from "./pages/auth/LawyerLogin/LawyerEmailForResetPass";
 import LawyerNewpassword from "./pages/auth/LawyerLogin/LawyerNewpassword";
+import ClientDashboard from "./pages/Client/ClientDashboard"; // Import the ClientDashboard component
 import { AppContentProvider } from "./context/AppContext"; // Ensure this path is correct
 import { AuthContextProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
@@ -58,6 +59,9 @@ const App = () => {
                   <Route path="/lawyer-login" element={<Lawyerlogin />} />
                   <Route path="/lawyer-email-for-password-reset" element={<LawyerEmailForResetPass />} />
                   <Route path="/lawyer-create-new-password" element={<LawyerNewpassword />} />
+
+                  {/* Client Dashboard (Protected Route) */}
+                  <Route path="/client/dashboard" element={<ClientDashboard />} />
 
                   {/* 404 Page */}
                   <Route path="*" element={<NotFound />} />

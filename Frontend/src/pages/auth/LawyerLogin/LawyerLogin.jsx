@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import {  toast } from "react-toastify";
 import { AppContext } from "../../../context/AppContext";
 import axios from "axios";
+import open from "../../../assets/Login_Cl_Lw/images/open.png";
+import close from "../../../assets/Login_Cl_Lw/images/close.png";
+import animation from "../../../assets/Login_Cl_Lw/images/gtrfe-1.mp4";
 
 
 
@@ -51,7 +54,7 @@ function Lawyerlogin() {
         {/* Animation Container - Hidden on mobile */}
         <div className="hidden md:flex md:w-[60%] bg-gradient-to-br from-[#0022fc] to-[#001cd8] justify-center items-center overflow-hidden p-4">
           <video
-            src="images/gtrfe-1.mp4"
+            src={animation}
             autoPlay
             loop
             muted
@@ -98,9 +101,9 @@ function Lawyerlogin() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
-                    <img src="images/close.png" alt="Hide password" className="w-6 h-6" />
+                    <img src={close} alt="Hide password" className="w-6 h-6" />
                   ) : (
-                    <img src="images/open.png" alt="Show password" className="w-6 h-6" />
+                    <img src={open} alt="Show password" className="w-6 h-6" />
                   )}
                 </button>
               </div>
