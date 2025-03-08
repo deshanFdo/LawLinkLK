@@ -3,25 +3,28 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/home/Home";
-import HowItWorks from "./pages/home/components/HowItWorks";
 import NotFound from "./pages/NotFound";
 import CookiePopup from "./components/CookiePopup";
 import LoadingScreen from "./pages/loading/LoadingScreen";
 import ClientCreateAcc from "./pages/auth/Registration/ClientCreateAcc";
-import Clientlogin from "../src/pages/auth/ClientLogin/ClientLogin";
+import ClientLogin from "./pages/auth/ClientLogin/ClientLogin";
 import VerifyEmail from "./pages/auth/ClientLogin/Verify-email";
-import PasswordRest from "./pages/auth/ClientLogin/Password-Rest";
+import PasswordReset from "./pages/auth/ClientLogin/Password-Rest";
 import EmailForResetPass from "./pages/auth/ClientLogin/EmailForResetPass";
-import Newpassword from "./pages/auth/ClientLogin/Newpassword";
-import LawyerCreateAcc from "./pages/auth/Registration/LawyerCreateAcc";
+import NewPassword from "./pages/auth/ClientLogin/Newpassword";
+import LawyerCreateAcc from "./pages/auth/registration/LawyerCreateAcc";
 import LawyerVerifyEmail from "./pages/auth/LawyerLogin/Lawyer-verify-email";
-import Lawyerlogin from "./pages/auth/LawyerLogin/LawyerLogin";
+import LawyerLogin from "./pages/auth/LawyerLogin/LawyerLogin";
 import LawyerEmailForResetPass from "./pages/auth/LawyerLogin/LawyerEmailForResetPass";
-import LawyerNewpassword from "./pages/auth/LawyerLogin/LawyerNewpassword";
-import ClientDashboard from "./pages/Client/ClientDashboard"; // Import the ClientDashboard component
-import { AppContentProvider } from "./context/AppContext"; // Ensure this path is correct
+import LawyerNewPassword from "./pages/auth/LawyerLogin/LawyerNewpassword";
+import LawyerRestPasswordOtp from "./pages/auth/LawyerLogin/LawyerPassword-Rest";
+import ClientDashboard from "./pages/Client/ClientDashboard";
+import LawyerDashboard from "./pages/Lawyer/LawyerDashboard";
+import Chat from "./pages/Chat/chat";
+import { AppContextProvider } from "./context/AppContext";
 import { AuthContextProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
+import ProtectedRoute from "./context/ProtectRoute";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,32 +39,53 @@ const App = () => {
 
   return (
     <AuthContextProvider>
-      <AppContentProvider>
+      <AppContextProvider>
         <SocketProvider>
           <Router>
             {isLoading && <LoadingScreen />}
             {!isLoading && (
               <>
                 <Routes>
-                  {/* Home Page (Landing Page) */}
-                  <Route path="/" element={<Home />} />
-
                   {/* Public Routes */}
-                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/" element={<Home />} /> {/* No protection on Home page */}
                   <Route path="/create-account" element={<ClientCreateAcc />} />
-                  <Route path="/login" element={<Clientlogin />} />
+                  <Route path="/login" element={<ClientLogin />} />
                   <Route path="/verify-email" element={<VerifyEmail />} />
-                  <Route path="/password-rest" element={<PasswordRest />} />
+                  <Route path="/password-reset" element={<PasswordReset />} />
                   <Route path="/email-for-password-reset" element={<EmailForResetPass />} />
-                  <Route path="/create-new-password" element={<Newpassword />} />
+                  <Route path="/create-new-password" element={<NewPassword />} />
                   <Route path="/lawyer-create-account" element={<LawyerCreateAcc />} />
                   <Route path="/lawyer-verify-email" element={<LawyerVerifyEmail />} />
-                  <Route path="/lawyer-login" element={<Lawyerlogin />} />
+                  <Route path="/lawyer-login" element={<LawyerLogin />} />
                   <Route path="/lawyer-email-for-password-reset" element={<LawyerEmailForResetPass />} />
-                  <Route path="/lawyer-create-new-password" element={<LawyerNewpassword />} />
+                  <Route path="/lawyer-create-new-password" element={<LawyerNewPassword />} />
+                  <Route path="/lawyer-password-rest" element={<LawyerRestPasswordOtp />} />
 
-                  {/* Client Dashboard (Protected Route) */}
-                  <Route path="/client/dashboard" element={<ClientDashboard />} />
+                  {/* Protected Routes */}
+                  <Route
+                    path="/client/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <ClientDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/lawyer/dashboard"
+                    element={
+                      <ProtectedRoute isLawyerRoute>
+                        <LawyerDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/chat"
+                    element={
+                      <ProtectedRoute>
+                        <Chat />
+                      </ProtectedRoute>
+                    }
+                  />
 
                   {/* 404 Page */}
                   <Route path="*" element={<NotFound />} />
@@ -82,7 +106,7 @@ const App = () => {
             )}
           </Router>
         </SocketProvider>
-      </AppContentProvider>
+      </AppContextProvider>
     </AuthContextProvider>
   );
 };

@@ -44,7 +44,7 @@ function RestPasswordOtp() {
   
       if (response.status === 200 || response.status === 201) {
         toast.success("OTP verified successfully!");
-        navigate("/create-new-password");
+        navigate("./password-rest");
       } else {
         toast.error(response.data.msg || "An error occurred. Please try again.");
       }

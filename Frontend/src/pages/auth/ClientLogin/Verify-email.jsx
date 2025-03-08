@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 function VerifyEmail() {
   const navigate = useNavigate();
   const { email, backendUrl } = useContext(AppContext);

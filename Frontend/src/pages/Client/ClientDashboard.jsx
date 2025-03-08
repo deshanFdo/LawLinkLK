@@ -1,20 +1,23 @@
-import React from "react";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
-function ClientDashboard() {
+const ClientDashboard = () => {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex-1">
-        <Header />
-        <div className="p-6">
-          <h1 className="text-2xl font-bold">Client Dashboard</h1>
-          <p>Welcome to your dashboard!</p>
-        </div>
-      </div>
+    <div>
+      <h1>Client Dashboard</h1>
+      <p>Welcome, {user.email}!</p>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
-}
+};
 
 export default ClientDashboard;

@@ -1,36 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext"; // Switched to simplified AuthContext
 import { toast } from "react-toastify";
-import axios from "axios";
+import animationVideo from "../../../assets/Login_Cl_Lw/images/gtrfe-1.mp4"; // Renamed for clarity
+import logoImage from "../../../assets/Login_Cl_Lw/images/logo.png"; // Renamed for clarity
+import openIcon from "../../../assets/Login_Cl_Lw/images/open.png"; // Renamed for clarity
+import closeIcon from "../../../assets/Login_Cl_Lw/images/close.png"; // Renamed for clarity
 
 function ClientLogin() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Use mock login from simplified context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const response = await axios.post("http://localhost:5000/api/client/login", {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
-        toast.success("Login successful! Redirecting to dashboard...");
-        setTimeout(() => {
-          navigate("/client-dashboard"); // Redirect to client dashboard
-        }, 2000);
-      }
-    } catch (err) {
-      toast.error("Invalid email or password. Please try again.");
-    } finally {
+    // Mock login: Pretend it’s successful
+    toast.success("Login successful! Redirecting to dashboard...");
+    login(email, password); // Use mock login
+    setTimeout(() => {
+      navigate("/client/dashboard"); // Fixed path to match your structure
       setIsLoading(false);
-    }
+    }, 2000);
   };
 
   return (
@@ -38,10 +33,9 @@ function ClientLogin() {
       <div className="flex flex-col md:flex-row max-w-[1000px] bg-white rounded-[12px] shadow-[0_4px_10px_rgba(0,0,0,0.1)] overflow-hidden md:animate-float">
         {/* Animation Container */}
         <div className="hidden md:flex md:w-[60%] bg-gradient-to-br from-[#0022fc] to-[#001cd8] justify-center items-center overflow-hidden p-4 relative">
-          {/* Video */}
           <div className="w-full h-full flex justify-center items-center">
             <video
-              src="images/gtrfe-1.mp4"
+              src={animationVideo} // Updated to use imported variable
               autoPlay
               loop
               muted
@@ -49,10 +43,8 @@ function ClientLogin() {
               style={{ zIndex: 1 }}
             ></video>
           </div>
-
-          {/* Logo */}
           <div className="absolute bottom-4 left-4 z-10">
-            <img src="images/logo.png" alt="Logo" className="w-20 h-auto" />
+            <img src={logoImage} alt="Logo" className="w-20 h-auto" /> // Updated to use imported variable
           </div>
         </div>
 
@@ -95,9 +87,9 @@ function ClientLogin() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
-                    <img src="images/close.png" alt="Hide password" className="w-6 h-6" />
+                    <img src={closeIcon} alt="Hide password" className="w-6 h-6" /> // Updated to use imported variable
                   ) : (
-                    <img src="images/open.png" alt="Show password" className="w-6 h-6" />
+                    <img src={openIcon} alt="Show password" className="w-6 h-6" /> // Updated to use imported variable
                   )}
                 </button>
               </div>

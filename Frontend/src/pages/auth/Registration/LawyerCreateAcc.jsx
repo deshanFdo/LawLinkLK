@@ -69,7 +69,6 @@ function LawyerCreateAcc() {
     axios.defaults.withCredentials = true;
 
     try {
-      // Create FormData object to send file and other data
       const formDataToSend = new FormData();
       formDataToSend.append("fullName", formData.fullName);
       formDataToSend.append("email", formData.email);
@@ -78,20 +77,14 @@ function LawyerCreateAcc() {
       formDataToSend.append("confirmPassword", formData.confirmPassword);
       formDataToSend.append("documentForVerification", formData.document);
 
-      // Send data to the backend
       const response = await axios.post(`${backendUrl}/api/lawyer/signup`, formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 201) {
-        // Set email in context (if needed)
         setEmail(formData.email);
-
-        // Show success message
-        toast.success("Account created successfully! Redirecting to dashboard...");
-
-        // Redirect to lawyer dashboard
-        navigate("/lawyer/lawyerdashboard");
+        toast.success("Account created successfully! Please check your email for the OTP.");
+        navigate("/lawyer-verify-email");
       } else {
         toast.error(response.data.msg || "An error occurred. Please try again.");
       }
