@@ -21,7 +21,7 @@ import LawyerRestPasswordOtp from "./pages/auth/LawyerLogin/LawyerPassword-Rest"
 import ClientDashboard from "./pages/Client/ClientDashboard";
 import LawyerDashboard from "./pages/Lawyer/LawyerDashboard";
 import Chat from "./pages/Chat/chat";
-import { AppContextProvider } from "./context/AppContext";
+import { AppContextProvider } from "../src/context/AppContext";
 import { AuthContextProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
 import ProtectedRoute from "./context/ProtectRoute";
@@ -32,7 +32,7 @@ const App = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 3000); // Simulating loading time, replace with actual logic if needed
 
     return () => clearTimeout(timer);
   }, []);
@@ -42,12 +42,13 @@ const App = () => {
       <AppContextProvider>
         <SocketProvider>
           <Router>
-            {isLoading && <LoadingScreen />}
-            {!isLoading && (
+            {isLoading ? (
+              <LoadingScreen /> // Show loading screen while app is loading
+            ) : (
               <>
                 <Routes>
                   {/* Public Routes */}
-                  <Route path="/" element={<Home />} /> {/* No protection on Home page */}
+                  <Route path="/" element={<Home />} /> {/* No ProtectedRoute for Home */}
                   <Route path="/create-account" element={<ClientCreateAcc />} />
                   <Route path="/login" element={<ClientLogin />} />
                   <Route path="/verify-email" element={<VerifyEmail />} />
@@ -62,34 +63,14 @@ const App = () => {
                   <Route path="/lawyer-password-rest" element={<LawyerRestPasswordOtp />} />
 
                   {/* Protected Routes */}
-                  <Route
-                    path="/client/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <ClientDashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/lawyer/dashboard"
-                    element={
-                      <ProtectedRoute isLawyerRoute>
-                        <LawyerDashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/chat"
-                    element={
-                      <ProtectedRoute>
-                        <Chat />
-                      </ProtectedRoute>
-                    }
-                  />
+                  <Route path="/client/dashboard" element={<ProtectedRoute><ClientDashboard /></ProtectedRoute>} />
+                  <Route path="/lawyer/dashboard" element={<ProtectedRoute><LawyerDashboard /></ProtectedRoute>} />
+                  <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
 
                   {/* 404 Page */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+
                 <CookiePopup />
                 <ToastContainer
                   position="top-right"

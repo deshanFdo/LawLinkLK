@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
-import generateToken from "../utills/generateToken";
+import generateToken from "../utills/generateToken.js";
 import transporter from "../config/nodemailer.js";
 import dotenv from "dotenv";
 import sodium from "libsodium-wrappers";

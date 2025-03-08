@@ -1,65 +1,25 @@
-// Context-SocketContext.jsx
+import React, { useContext, useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { AppContext } from '../context/AppContext';
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useAuthContext } from './AuthContext';
-import io from "socket.io-client";
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn, userData, getUserData } = useContext(AppContext); // Destructure userData here
+  const location = useLocation();
 
-const SocketContext = createContext();
+  useEffect(() => {
+    // Try to get user data if we're logged in but don't have user data
+    if (isLoggedIn && !userData) {
+      getUserData();
+    }
+  }, [isLoggedIn, userData, getUserData]); // Add userData as a dependency
 
-export const useSocketContext = () => {
-    return useContext(SocketContext);
+  if (!isLoggedIn) {
+    // Redirect to login page if not logged in
+    // Store the path they were trying to access
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  }
+
+  return children;
 };
 
-export const SocketProvider = ({ children }) => {
-    const [socket, setSocket] = useState(null);
-    const [onlineUsers, setOnlineUsers] = useState([]);
-    const { user } = useAuthContext();
-
-    useEffect(() => {
-        if (user) {
-            console.log("Connecting to WebSocket with userId:", user._id);
-            const newSocket = io('http://localhost:5000', { 
-                query: { 
-                    userId: user._id,
-                    name: user?.name || ''
-                }
-            });
-
-            newSocket.on('connect', () => {
-                console.log('Connected to WebSocket server');
-            });
-
-            newSocket.on('disconnect', () => {
-                console.log('Disconnected from WebSocket server');
-                setSocket(null);
-            });
-
-            newSocket.on('getOnlineUsers', (users) => {
-                setOnlineUsers(users);
-            });
-
-            newSocket.on('newMessage', (newMessage) => {
-                const message = {
-                    ...newMessage,
-                    shouldShake: true,
-                    createdAt: Date.now()
-                };
-                useConversation.setState(prev => ({
-                    messages: [...prev.messages, message]
-                }));
-            });
-
-            setSocket(newSocket);
-
-            return () => {
-                newSocket.close();
-            };
-        }
-    }, [user]);
-
-    return (
-        <SocketContext.Provider value={{ socket }}>
-            {children}
-        </SocketContext.Provider>
-    );
-};
+export default ProtectedRoute;

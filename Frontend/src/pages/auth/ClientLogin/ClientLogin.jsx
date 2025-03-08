@@ -1,15 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../context/AuthContext"; // Switched to simplified AuthContext
+import { useAuthContext } from "../../../context/AuthContext"; // Now using useAuthContext
 import { toast } from "react-toastify";
-import animationVideo from "../../../assets/Login_Cl_Lw/images/gtrfe-1.mp4"; // Renamed for clarity
-import logoImage from "../../../assets/Login_Cl_Lw/images/logo.png"; // Renamed for clarity
-import openIcon from "../../../assets/Login_Cl_Lw/images/open.png"; // Renamed for clarity
-import closeIcon from "../../../assets/Login_Cl_Lw/images/close.png"; // Renamed for clarity
+import animationVideo from "../../../assets/Login_Cl_Lw/images/gtrfe-1.mp4";
+import logoImage from "../../../assets/Login_Cl_Lw/images/logo.png";
+import openIcon from "../../../assets/Login_Cl_Lw/images/open.png";
+import closeIcon from "../../../assets/Login_Cl_Lw/images/close.png";
 
 function ClientLogin() {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Use mock login from simplified context
+  const { login } = useAuthContext(); // Now using useAuthContext
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,13 +19,17 @@ function ClientLogin() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock login: Pretend it’s successful
-    toast.success("Login successful! Redirecting to dashboard...");
-    login(email, password); // Use mock login
-    setTimeout(() => {
-      navigate("/client/dashboard"); // Fixed path to match your structure
+    // Attempt login
+    if (login(email, password)) {
+      toast.success("Login successful! Redirecting...");
+      setTimeout(() => {
+        navigate("/client/dashboard");
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      toast.error("Invalid email or password.");
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -35,7 +39,7 @@ function ClientLogin() {
         <div className="hidden md:flex md:w-[60%] bg-gradient-to-br from-[#0022fc] to-[#001cd8] justify-center items-center overflow-hidden p-4 relative">
           <div className="w-full h-full flex justify-center items-center">
             <video
-              src={animationVideo} // Updated to use imported variable
+              src={animationVideo}
               autoPlay
               loop
               muted
@@ -44,7 +48,7 @@ function ClientLogin() {
             ></video>
           </div>
           <div className="absolute bottom-4 left-4 z-10">
-            <img src={logoImage} alt="Logo" className="w-20 h-auto" /> // Updated to use imported variable
+            <img src={logoImage} alt="Logo" className="w-20 h-auto" />
           </div>
         </div>
 
@@ -87,9 +91,9 @@ function ClientLogin() {
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? (
-                    <img src={closeIcon} alt="Hide password" className="w-6 h-6" /> // Updated to use imported variable
+                    <img src={closeIcon} alt="Hide password" className="w-6 h-6" />
                   ) : (
-                    <img src={openIcon} alt="Show password" className="w-6 h-6" /> // Updated to use imported variable
+                    <img src={openIcon} alt="Show password" className="w-6 h-6" />
                   )}
                 </button>
               </div>
